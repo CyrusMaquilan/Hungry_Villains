@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hungry Villains | Cashier POS</title>
+    <meta name="theme-color" content="#182124">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="icon" href="./icons/icon-192.png" type="image/png">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/register.css">
+</head>
+<body>
+
+    <div id="login-section">
+        <div class="login-visual">
+            <img src="pictures/burgir.webp" alt="">
+            <div class="login-visual-brand"><span class="brand-mark">HV</span><strong>Hungry Villains</strong></div>
+        </div>
+        <div class="login-card">
+            <span class="eyebrow">HUNGRY VILLAINS</span>
+            <h1>Register sign in</h1>
+            <p>Connect to your store server to start a cashier session.</p>
+            <form id="login-form">
+                <label for="username">Username</label>
+                <input type="text" id="username" autocomplete="username" maxlength="50" required>
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password" maxlength="256" required>
+                <p id="server-status" class="login-error" role="status" hidden></p>
+                <button type="submit" class="btn-primary">Sign in</button>
+            </form>
+            <button id="pwa-install-button" class="pwa-install-button" type="button" hidden>Install POS</button>
+        </div>
+    </div>
+
+    <div id="app-section">
+        <aside class="register-nav">
+            <div class="register-brand"><span class="brand-mark">HV</span><div><strong>Hungry Villains</strong><small>Point of sale</small></div></div>
+            <nav aria-label="Register">
+                <button data-page="menu" onclick="showPage('menu')"><span aria-hidden="true">⊞</span> Register</button>
+                <button id="orders-admin-button" data-page="admin" onclick="showPage('admin')"><span aria-hidden="true">◫</span> Open sales</button>
+                <button id="transaction-history-button" data-page="transactions" onclick="showPage('transactions')"><span aria-hidden="true">≡</span> Sales history</button>
+                <button data-page="queue" onclick="showPage('queue')"><span aria-hidden="true">↻</span> Sync queue <b id="queue-count"></b></button>
+                <div class="nav-separator"></div>
+                <button id="inventory-admin-button" data-page="inventory" onclick="showPage('inventory')"><span aria-hidden="true">▤</span> Inventory</button>
+                <button id="admin-toggle-btn"><span aria-hidden="true">◇</span> Manage menu</button>
+                <button id="reports-admin-button" data-page="reports" onclick="showPage('reports')"><span aria-hidden="true">▥</span> Reports</button>
+                <button id="users-admin-button" data-page="users" onclick="showPage('users')"><span aria-hidden="true">◎</span> Accounts</button>
+            </nav>
+            <div class="register-nav-bottom">
+                <button id="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
+                <button onclick="logout()" type="button">Sign out</button>
+            </div>
+        </aside>
+        <div class="register-main">
+            <div class="register-topbar">
+                <strong>Store register</strong>
+                <div><span id="connection-pill" class="connection-pill" role="status" data-state="connecting">Connecting</span>
+                    <span class="operator" id="welcome-label"></span></div>
+            </div>
+            <div id="register-notice" class="register-notice" role="status" hidden></div>
+
+            <div id="menu-view" style="display:none;">
+                <div class="register-grid">
+                    <section class="catalog" aria-labelledby="catalog-heading">
+                        <div class="catalog-heading">
+                            <div><h1 id="catalog-heading">Product catalog</h1><p id="results-count"></p></div>
+                            <label class="search-field"><span aria-hidden="true">⌕</span>
+                                <input id="product-search" type="search" placeholder="Search name or product code" aria-label="Search name or product code">
+                            </label>
+                        </div>
+                        <div id="category-filters" class="category-filters" aria-label="Product categories"></div>
+                        <div id="menu-container" class="catalog-grid"></div>
+                    </section>
+
+                    <aside class="register-cart" id="current-sale" aria-labelledby="cart-heading">
+                        <div class="cart-heading">
+                            <div><h2 id="cart-heading">Current sale</h2><p><span id="cart-count">0</span> in cart</p></div>
+                            <button class="btn-cancel" id="clear-cart" type="button" disabled>Clear</button>
+                        </div>
+                        <div id="cart-items-container" class="register-cart-items"></div>
+                        <div class="register-payment">
+                            <div class="summary-row"><span>Subtotal</span><strong id="cart-subtotal">₱0.00</strong></div>
+                            <details class="discount-fields">
+                                <summary>Add a discount</summary>
+                                <label for="discount-amount">Discount amount (₱)</label>
+                                <input id="discount-amount" type="text" inputmode="decimal" placeholder="0.00">
+                                <label for="discount-reason">Reason</label>
+                                <input id="discount-reason" type="text" maxlength="40" placeholder="e.g. Store promotion">
+                            </details>
+                            <div class="summary-row grand-total"><strong>Total due</strong><strong id="cart-total">₱0.00</strong></div>
+                            <label for="payment-method">Payment method</label>
+                            <select id="payment-method">
+                                <option value="cash">Cash</option>
+                                <option value="ewallet">E-wallet</option>
+                                <option value="card">Card</option>
+                            </select>
+                            <div id="cash-fields">
+                                <label for="amount-tendered">Cash received (₱)</label>
+                                <div class="cash-input">
+                                    <input type="text" id="amount-tendered" inputmode="decimal" placeholder="0.00">
+                                    <button type="button" class="btn-cancel" id="exact-cash">Exact</button>
+                                </div>
+                                <div class="summary-row"><span>Change</span><strong id="change-preview">₱0.00</strong></div>
+                            </div>
+                            <div id="reference-field" hidden>
+                                <label for="payment-reference">Payment reference</label>
+                                <input id="payment-reference" type="text" maxlength="25" placeholder="Reference from payment provider">
+                            </div>
+                            <button id="complete-sale-button" onclick="checkout()" class="btn-primary" type="button" disabled>Review sale <span aria-hidden="true">→</span></button>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+
+            <a class="mobile-cart-link" href="#current-sale"><span>View cart <b id="mobile-cart-count">0</b></span><strong id="mobile-cart-total">₱0.00</strong></a>
+
+            <div id="queue-view" style="display:none;">
+                <section class="container users-admin-page">
+                    <div class="inventory-heading">
+                        <div><h2>Sync queue</h2><p id="queue-summary"></p></div>
+                        <button type="button" id="sync-now" class="btn-primary inventory-refresh">Retry sync</button>
+                    </div>
+                    <p>Sales saved on this register. For a stock conflict, ask a manager to check inventory before retrying.</p>
+                    <div class="users-table-wrap">
+                        <table class="users-table">
+                            <thead><tr><th>Receipt</th><th>Sale time</th><th>Total</th><th>Sync status</th><th></th></tr></thead>
+                            <tbody id="queue-list"></tbody>
+                        </table>
+                        <p id="queue-empty">No sales on this register for this account.</p>
+                    </div>
+                </section>
+            </div>
+
+        <div id="admin-view" style="display: none;">
+            <div class="container">
+                <h2>Open Sales</h2>
+                <p>Sales that still need to be completed.</p>
+                <div id="admin-orders-list" class="menu-grid" style="margin-bottom: 30px;"></div>
+            </div>
+        </div>
+
+        <div id="users-view" style="display: none;">
+            <div class="container users-admin-page">
+                <h2>Cashier Accounts</h2>
+                <p id="users-admin-status" role="status"></p>
+                <form id="create-user-form" class="user-create-form">
+                    <h3>Create Cashier Account</h3>
+                    <div class="user-form-fields">
+                        <label>Username
+                            <input type="text" id="create-user-username" maxlength="50" required>
+                        </label>
+                        <label>Password
+                            <input type="password" id="create-user-password" minlength="8" required>
+                        </label>
+                        <label class="user-role-option"><input type="checkbox" id="create-user-cashier" checked> Cashier (POS and sales)</label>
+                        <label class="user-role-option"><input type="checkbox" id="create-user-admin"> Admin (user and menu management)</label>
+                        <button class="btn-primary" type="submit">Create Account</button>
+                    </div>
+                </form>
+                <div class="users-table-wrap">
+                    <table class="users-table">
+                        <thead>
+                            <tr><th>Username</th><th>Cashier</th><th>Admin</th><th>Created</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="transactions-view" style="display: none;">
+            <div class="container users-admin-page">
+                <h2>Transaction History</h2>
+                <p id="transaction-history-status" role="status">Loading transactions...</p>
+                <div class="users-table-wrap">
+                    <table class="users-table">
+                        <thead>
+                            <tr><th>Transaction</th><th>Date &amp; Time</th><th>Cashier</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Action</th></tr>
+                        </thead>
+                        <tbody id="transaction-history-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="reports-view" style="display: none;">
+            <div class="container users-admin-page">
+                <h2>Sales Reports</h2>
+                <p id="reports-status" role="status">Choose a date range to view sales.</p>
+                <form id="reports-filter" class="report-filter">
+                    <label>From
+                        <input type="date" id="reports-start-date" required>
+                    </label>
+                    <label>To
+                        <input type="date" id="reports-end-date" required>
+                    </label>
+                    <button class="btn-primary" type="submit">Run Report</button>
+                </form>
+                <div id="reports-summary" class="report-summary" aria-live="polite"></div>
+                <div class="report-tables">
+                    <section>
+                        <h3>Daily Sales</h3>
+                        <div class="users-table-wrap">
+                            <table class="users-table">
+                                <thead><tr><th>Date</th><th>Transactions</th><th>Sales</th></tr></thead>
+                                <tbody id="reports-daily-body"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section>
+                        <h3>Top Products</h3>
+                        <div class="users-table-wrap">
+                            <table class="users-table">
+                                <thead><tr><th>Product</th><th>Quantity Sold</th><th>Sales</th></tr></thead>
+                                <tbody id="reports-products-body"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="inventory-view" style="display: none;">
+            <div class="container users-admin-page">
+                <div class="inventory-heading">
+                    <div>
+                        <h2>Inventory</h2>
+                        <p id="inventory-status" role="status">Product stock and details.</p>
+                    </div>
+                    <button id="inventory-refresh-button" class="btn-primary inventory-refresh" type="button">Refresh Inventory</button>
+                </div>
+                <div class="users-table-wrap">
+                    <table class="users-table inventory-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th><th>Product</th><th>Category</th><th>Price</th>
+                                <th>Stock</th><th>Status</th><th>Description</th><th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div id="user-editor-modal" class="modal">
+        <div class="modal-content">
+            <h3 id="user-editor-title">Edit User</h3>
+            <form id="user-editor-form">
+                <input type="hidden" id="edit-user-id">
+                <label>Username
+                    <input type="text" id="edit-user-username" maxlength="50" required>
+                </label>
+                <label>New password <small>(leave blank to keep current password)</small>
+                    <input type="password" id="edit-user-password" minlength="8" autocomplete="new-password">
+                </label>
+                <label class="user-role-option"><input type="checkbox" id="edit-user-cashier"> Cashier (POS and sales)</label>
+                <label class="user-role-option"><input type="checkbox" id="edit-user-admin"> Admin (user and menu management)</label>
+                <div class="modal-actions">
+                    <button class="btn-primary" type="submit">Save Changes</button>
+                    <button class="btn-cancel" type="button" onclick="closeModal('user-editor-modal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="checkout-confirmation-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="checkout-confirmation-heading">
+        <div class="modal-content checkout-confirmation-content">
+            <h2 id="checkout-confirmation-heading">Confirm Purchase</h2>
+            <p>Please review the items and payment before completing this sale.</p>
+            <ul id="checkout-confirmation-items" class="checkout-confirmation-items"></ul>
+            <div id="checkout-confirmation-totals" class="checkout-confirmation-totals"></div>
+            <div class="modal-actions">
+                <button id="confirm-checkout-button" class="btn-primary" type="button" onclick="confirmCheckout()">Confirm Purchase</button>
+                <button class="btn-cancel" type="button" onclick="closeModal('checkout-confirmation-modal')">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="receipt-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="receipt-heading">
+        <div class="modal-content receipt-content">
+            <div id="receipt-print-area">
+                <h2 id="receipt-heading">Hungry Villains</h2>
+                <p class="receipt-subtitle">Sales Receipt</p>
+                <div id="receipt-details"></div>
+                <table class="receipt-table">
+                    <thead><tr><th>Item</th><th>Qty</th><th>Price</th><th>Subtotal</th></tr></thead>
+                    <tbody id="receipt-items"></tbody>
+                </table>
+                <div id="receipt-totals"></div>
+                <p class="receipt-thanks">Thank you for your purchase!</p>
+            </div>
+            <div class="modal-actions receipt-actions">
+                <button id="receipt-print-button" class="btn-primary" type="button">Print Receipt</button>
+                <button class="btn-cancel" type="button" onclick="closeModal('receipt-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-modal" class="modal">
+    <div class="modal-content">
+        <h3>Product Settings</h3>
+        <form id="add-item-form">
+            <input type="hidden" id="new-id" value="">
+            <input type="hidden" id="expected-stock">
+            <label for="new-name">Product name</label>
+            <input type="text" id="new-name" placeholder="Food Name" required>
+            <label for="new-category">Category</label>
+            <input id="new-category" type="text" maxlength="50" placeholder="e.g. Burgers">
+            <label for="new-price">Price (₱)</label>
+            <input type="number" id="new-price" min="0" max="99999999.99" step="0.01" required>
+            
+            <label for="new-stock">Stock quantity</label>
+            <input type="number" id="new-stock" min="0" max="2147483647" step="1" required>
+            
+            <div style="margin: 8px 0; text-align: left;">
+                <label for="new-availability" style="font-size: 0.9rem; color: #666;">Status:</label>
+                <select id="new-availability" style="width: 100%; padding: 12px; border: 1px solid #dfe4ea; border-radius: 8px;">
+                    <option value="1">Available</option>
+                    <option value="0">Out of Stock</option>
+                </select>
+            </div>
+
+            <input type="text" id="new-icon" placeholder="Image URL or emoji (optional if uploading a photo)">
+            <label for="new-image">Product photo (stored on the server; JPG, PNG, WEBP, or GIF, up to 2 MB)</label>
+            <input type="file" id="new-image" accept="image/jpeg,image/png,image/webp,image/gif">
+            <textarea id="new-description" placeholder="Short description" rows="3"></textarea>
+            
+            <div class="modal-actions">
+                <button type="submit" class="btn-primary">Save Product</button>
+                <button type="button" onclick="closeModal('add-modal')" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script src="assets/js/core.js"></script>
+    <script src="assets/js/offline.js"></script>
+    <script src="assets/js/checkout.js"></script>
+    <script src="assets/js/management.js"></script>
+    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/navigation.js"></script>
+    <script src="assets/js/catalog-cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+/* --- MGA VARIABLE AT BASE --- */
+:root {
+    --primary: #f57c00;
+    --primary-hover: #e65100;
+    --primary-light: #fff3e0;
+    --primary-bright: #ff9800;
+    --dark: #2f3542;
+    --text: #2f3542;
+    --muted: #666;
+    --light: #f1f2f6;
+    --white: #ffffff;
+    --gray: #dfe4ea;
+    --border: #ccc;
+    --image-placeholder: #eee;
+}
+
+body.dark-mode {
+    --text: #f2f3f5;
+    --muted: #b5bac1;
+    --light: #313338;
+    --white: #2b2d31;
+    --gray: #4e5058;
+    --border: #4e5058;
+    --image-placeholder: #232428;
+}
+
+* {
+    box-sizing: border-box; /* Mahalaga para sa responsive na layout */
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* --- LOGIN / REGISTER SCREEN --- */
+#login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary), var(--primary-bright));
+    padding: 20px;
+}
+
+.server-status {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000;
+    width: 100%;
+    padding: 12px 16px;
+    background: #b42318;
+    color: #ffffff;
+    font-weight: 700;
+    text-align: center;
+}
+
+.server-status[hidden] { display: none; }
+
+.login-card {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    width: 100%;
+    max-width: 350px; /* Responsive na lapad */
+    text-align: center;
+}
+
+.brand-title { color: var(--primary); margin-bottom: 10px; }
+
+/* Palitan ang Teksto (Login <-> Register) */
+.switch-text {
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+.switch-text span {
+    color: var(--primary);
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+/* --- MGA ELEMENTO NG FORM --- */
+input, textarea {
+    width: 100%; /* Buong lapad ng container */
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid var(--gray);
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+button {
+    cursor: pointer;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: 0.2s ease;
+}
+
+.btn-primary { background-color: var(--primary); color: var(--white); width: 100%; }
+.btn-primary:hover { background-color: var(--primary-hover); }
+
+.btn-logout { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.btn-cancel { background: var(--gray); color: var(--text); }
+
+.icon-btn { 
+    background: var(--dark); color: white; 
+    border-radius: 50%; width: 40px; height: 40px; 
+    display: flex; align-items: center; justify-content: center; 
+    font-size: 1.2rem;
+}
+
+/* --- HEADER AT NABIGASYON --- */
+#app-section { display: none; }
+
+header {
+    background-color: var(--white);
+    padding: 1rem 5%; /* 5% padding para sa responsiveness */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo { 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    color: var(--primary); 
+    cursor: pointer; 
+}
+
+.main-nav { display: flex; gap: 20px; }
+.nav-link {
+    text-decoration: none;
+    color: var(--text);
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 5px;
+}
+
+.nav-link.active {
+    color: var(--primary);
+    font-weight: 700; /* Gawing litaw ang active link nang walang background */
+}
+.nav-link:hover {
+    background-color: var(--primary-light); /* Magdagdag ng background kapag tinutok ang cursor sa anumang link */
+    color: var(--primary);
+}
+
+.nav-controls { display: flex; gap: 10px; align-items: center; }
+
+.pwa-install-button {
+    background: var(--primary);
+    color: var(--white);
+    width: 100%;
+    margin-top: 12px;
+}
+
+.pwa-install-button[hidden] { display: none; }
+
+.theme-toggle {
+    background: var(--dark);
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+/* --- HERO SECTION (Home) --- */
+.hero-banner {
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1000&q=80');
+    background-size: cover;
+    background-position: center;
+    height: 60vh; /* Relatibo sa taas ng screen */
+    min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+}
+
+.hero-text h1 { font-size: 3rem; margin-bottom: 10px; line-height: 1.2; }
+.hero-text p { font-size: 1.2rem; margin-bottom: 20px; opacity: 0.9; }
+
+/* Mga Tampok */
+.features {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 3rem 5%;
+    max-width: 1500px;
+    margin: 0 auto;
+}
+.feature-box {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    text-align: center;
+    flex: 1; /* Pantay na lapad */
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    color: var(--text);
+}
+
+/* --- MENU GRID --- */
+.container { padding: 2rem 5%; max-width: 1500px; margin: 0 auto; }
+
+.menu-grid {
+    display: grid;
+    /* Ang Auto-fit ay nagpapababa ng mga column base sa laki ng screen */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.menu-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 2rem;
+    align-items: start;
+}
+
+.menu-content {
+    min-width: 0;
+}
+
+.cart-sidebar {
+    position: sticky;
+    top: 100px;
+    background: var(--white);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.cart-sidebar h2 {
+    margin: 0 0 1rem;
+    font-size: 1.25rem;
+}
+
+#cart-count {
+    display: inline-flex;
+    min-width: 1.6rem;
+    height: 1.6rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.85rem;
+    vertical-align: middle;
+}
+
+#cart-items-container {
+    max-height: 45vh;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 0;
+}
+
+.cart-item-details {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cart-remove {
+    background: #e74c3c;
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    padding: 2px 8px;
+}
+
+.food-card {
+    background: var(--white);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.food-card:hover { transform: translateY(-5px); }
+
+#admin-orders-list {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+}
+
+.sale-card {
+    min-width: 0;
+    padding: 1rem;
+    text-align: left;
+}
+
+.sale-card h4 {
+    margin: 0 0 0.5rem;
+}
+
+.sale-card-cashier {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+.sale-card-meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+    margin: 0 0 0.75rem;
+    font-size: 0.85rem;
+}
+
+.sale-receipt {
+    margin-bottom: 0.75rem;
+    padding: 0.65rem;
+    border: 1px dashed var(--border);
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.sale-receipt h5 {
+    margin: 0 0 0.4rem;
+}
+
+.sale-receipt table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.sale-receipt th,
+.sale-receipt td {
+    padding: 0.25rem 0.15rem;
+    border-bottom: 1px solid var(--border);
+    text-align: right;
+}
+
+.sale-receipt th:first-child,
+.sale-receipt td:first-child {
+    width: 45%;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.sale-receipt-total {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.45rem 0 0;
+    font-size: 0.95rem;
+}
+
+.add-item-card {
+    display: flex;
+    min-height: 100%;
+    min-height: 320px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border: 2px dashed var(--primary);
+    background: var(--white);
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+
+.add-item-card:hover {
+    background: var(--primary-light);
+}
+
+.add-item-card-icon {
+    display: grid;
+    width: 3rem;
+    height: 3rem;
+    place-items: center;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    font-size: 2rem;
+    line-height: 1;
+}
+
+.food-img {
+    height: 180px;
+    background-color: var(--image-placeholder);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+}
+
+.food-product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.food-info { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+.food-title { margin: 0 0 10px 0; font-size: 1.2rem; }
+
+/* --- MGA MODAL --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px); /* Magandang blur effect */
+}
+
+.modal-content {
+    background: var(--white);
+    color: var(--text);
+    padding: 2rem;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+.modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+.cart-total { text-align: right; margin-top: 20px; font-size: 1.2rem; }
+
+.checkout-confirmation-content {
+    max-width: 480px;
+}
+
+.checkout-confirmation-items {
+    max-height: 35vh;
+    overflow-y: auto;
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+
+.checkout-confirmation-items li,
+.checkout-confirmation-totals p {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0;
+    padding: 0.45rem 0;
+}
+
+.checkout-confirmation-totals {
+    border-top: 1px solid var(--border);
+}
+
+.checkout-confirmation-totals p:last-child {
+    font-size: 1.1rem;
+}
+
+.payment-label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.change-preview {
+    margin: 0.5rem 0 1rem;
+    text-align: right;
+    font-weight: 700;
+}
+
+.receipt-content {
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.receipt-content h2,
+.receipt-subtitle,
+.receipt-thanks {
+    text-align: center;
+}
+
+.receipt-content h2 {
+    margin: 0;
+}
+
+.receipt-subtitle {
+    margin: 0 0 1rem;
+}
+
+.receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.receipt-table th,
+.receipt-table td {
+    padding: 0.4rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+#receipt-totals {
+    margin-top: 1rem;
+    border-top: 1px dashed var(--border);
+}
+
+#receipt-totals p {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.5rem 0;
+}
+
+.users-admin-button {
+    position: fixed;
+    left: 18px;
+    bottom: 18px;
+    z-index: 900;
+    display: inline-flex;
+    align-items: center;
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.users-admin-page {
+    color: var(--text);
+}
+
+.user-create-form {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border-radius: 10px;
+    background: var(--white);
+}
+
+.user-create-form h3 {
+    margin-top: 0;
+}
+
+.user-form-fields {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem 1rem;
+    align-items: end;
+}
+
+.user-role-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+}
+
+.user-role-option input {
+    width: auto;
+    margin: 0;
+}
+
+.users-table-wrap {
+    overflow-x: auto;
+    background: var(--white);
+    border-radius: 10px;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    color: var(--text);
+}
+
+.users-table th,
+.users-table td {
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.users-table th {
+    white-space: nowrap;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.user-action {
+    width: auto;
+    padding: 0.5rem 0.75rem;
+}
+
+#users-admin-status.error {
+    color: #d93025;
+}
+
+#reports-status.error {
+    color: #d93025;
+}
+
+#inventory-status.error {
+    color: #d93025;
+}
+
+.inventory-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.inventory-heading h2 {
+    margin-bottom: 0;
+}
+
+.inventory-heading p {
+    margin-top: 0.25rem;
+}
+
+.inventory-refresh {
+    width: auto;
+    white-space: nowrap;
+}
+
+.inventory-table {
+    min-width: 900px;
+}
+
+.inventory-status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.inventory-status-badge.in-stock {
+    background: #e6f4ea;
+    color: #137333;
+}
+
+.inventory-status-badge.out-of-stock {
+    background: #fce8e6;
+    color: #b3261e;
+}
+
+.report-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1rem;
+    align-items: end;
+    margin: 1.25rem 0;
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 10px;
+}
+
+.report-filter label {
+    min-width: 180px;
+    flex: 1;
+}
+
+.report-filter input {
+    display: block;
+}
+
+.report-filter button {
+    width: auto;
+}
+
+.report-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0 1.5rem;
+}
+
+.report-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 10px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+.report-card span {
+    color: var(--muted);
+}
+
+.report-card strong {
+    color: var(--primary);
+    font-size: 1.25rem;
+}
+
+.report-tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.report-tables h3 {
+    margin-bottom: 0.5rem;
+}
+
+.modal-content label:not(.user-role-option) {
+    display: block;
+    margin: 0.75rem 0;
+}
+
+.modal-content small {
+    color: var(--muted);
+}
+
+body.dark-mode input,
+body.dark-mode textarea,
+body.dark-mode select {
+    background-color: #383a40;
+    border-color: var(--border);
+    color: var(--text);
+}
+
+body.dark-mode .food-info p {
+    color: var(--muted) !important;
+}
+
+body.dark-mode .user-create-form,
+body.dark-mode .users-table-wrap,
+body.dark-mode .report-filter,
+body.dark-mode .report-card {
+    background: var(--white);
+}
+
+@media print {
+    @page {
+        size: 80mm 200mm;
+        margin: 0;
+    }
+
+    body * {
+        visibility: hidden !important;
+    }
+
+    #receipt-modal,
+    #receipt-modal * {
+        visibility: visible !important;
+    }
+
+    #receipt-modal,
+    #receipt-modal.receipt-print-layout {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 80mm;
+        height: auto;
+        padding: 0;
+        background: #fff;
+        backdrop-filter: none;
+    }
+
+    #receipt-modal .receipt-content {
+        width: 80mm;
+        max-width: none;
+        max-height: none;
+        overflow: visible;
+        padding: 4mm;
+        color: #000;
+        box-shadow: none;
+    }
+
+    #receipt-modal #receipt-print-area {
+        width: 100%;
+    }
+
+    #receipt-modal .receipt-actions {
+        display: none !important;
+    }
+}
+
+#receipt-modal.receipt-print-layout {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80mm;
+    height: auto;
+    padding: 0;
+    background: #fff;
+}
+
+#receipt-modal.receipt-print-layout .receipt-content {
+    width: 80mm;
+    max-width: none;
+    max-height: none;
+    overflow: visible;
+    padding: 4mm;
+    box-shadow: none;
+}
+
+#receipt-modal.receipt-print-layout .receipt-actions {
+    display: none !important;
+}
+
+/* =========================================
+   MGA TUNTUNIN SA MOBILE AT RESPONSIVE (MEDIA QUERIES)
+   ========================================= */
+
+@media (max-width: 768px) {
+    /* 1. I-stack ang mga elemento ng Header */
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 1rem;
+    }
+
+    .nav-controls {
+        width: 100%;
+        justify-content: space-between; /* Ikalat ang mga button */
+        flex-wrap: wrap;
+    }
+
+    .inventory-heading {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    /* 2. I-stack ang mga Tampok sa Home Page */
+    .features {
+        flex-direction: column;
+    }
+
+    .menu-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .users-admin-button {
+        left: 12px;
+        bottom: 12px;
+    }
+
+    .cart-sidebar {
+        position: static;
+        grid-row: 1;
+    }
+    
+    .feature-box {
+        margin-bottom: 15px;
+    }
+
+    /* 3. Ayusin ang Typography */
+    .hero-text h1 { font-size: 2rem; }
+    
+    /* 4. Lapad ng Login Card */
+    .login-card {
+        width: 90%;
+        padding: 1.5rem;
+    }
+}
